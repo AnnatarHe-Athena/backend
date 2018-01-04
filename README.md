@@ -8,6 +8,10 @@
 
 `proto` 文件和 API Server 共用。
 
+## env
+
+release
+
 ## 注意
 
 尚未部署至生产环境

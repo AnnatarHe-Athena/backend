@@ -5,6 +5,7 @@ import (
 	"log"
 	"net"
 
+	"github.com/douban-girls/backend/cfg"
 	pb "github.com/douban-girls/backend/proto"
 	"github.com/douban-girls/backend/services"
 	"google.golang.org/grpc"
@@ -14,6 +15,9 @@ import (
 const port = ":9988"
 
 func main() {
+
+	log.Println(cfg.CONFIG)
+
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
