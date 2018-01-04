@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net"
 
@@ -19,11 +20,12 @@ func main() {
 	}
 	s := grpc.NewServer()
 	pb.RegisterCellsServer(s, &services.CellServer{})
+	pb.RegisterHelloServer(s, &services.HelloServer{})
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 
-	println("back end server running on ", port)
+	fmt.Println("back end server running on ", port)
 }

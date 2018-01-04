@@ -3,5 +3,8 @@ package utils
 import "log"
 
 func ErrorLog(err error) {
-	log.Fatalln("error here: ", err.Error())
+	if err != nil {
+		log.Fatalln("error here: ", err.Error())
+
+	}
 }

@@ -6,11 +6,14 @@ Package proto is a generated protocol buffer package.
 
 It is generated from these files:
 	cells.proto
+	hello.proto
 
 It has these top-level messages:
 	CellsRequest
 	CellItem
 	CellsReply
+	HelloRequest
+	HelloReply
 */
 package proto
 
@@ -34,7 +37,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto1.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// The request message containing the user's name.
 type CellsRequest struct {
 	From   int32 `protobuf:"varint,1,opt,name=from" json:"from,omitempty"`
 	Take   int32 `protobuf:"varint,2,opt,name=take" json:"take,omitempty"`
@@ -139,7 +141,6 @@ func (m *CellItem) GetCreatedAt() int64 {
 	return 0
 }
 
-// The response message containing the greetings
 type CellsReply struct {
 	Cells []*CellItem `protobuf:"bytes,2,rep,name=cells" json:"cells,omitempty"`
 }
@@ -173,7 +174,6 @@ const _ = grpc.SupportPackageIsVersion4
 // Client API for Cells service
 
 type CellsClient interface {
-	// Sends a greeting
 	GetList(ctx context.Context, in *CellsRequest, opts ...grpc.CallOption) (*CellsReply, error)
 }
 
@@ -197,7 +197,6 @@ func (c *cellsClient) GetList(ctx context.Context, in *CellsRequest, opts ...grp
 // Server API for Cells service
 
 type CellsServer interface {
-	// Sends a greeting
 	GetList(context.Context, *CellsRequest) (*CellsReply, error)
 }
 
