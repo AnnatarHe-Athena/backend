@@ -2,7 +2,7 @@ output_name = backend-exec
 BUILD_TIME=`date +%FT%T%z`
 
 protoc:
-	protoc -I proto/ proto/*.proto --go_out=plugins=grpc:proto
+	protoc -I proto-src/ proto-src/*.proto --go_out=proto --plugin=grpc:proto
 
 release:
 	go build -tags release -o $(output_name)

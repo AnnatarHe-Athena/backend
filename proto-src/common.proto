@@ -1,0 +1,27 @@
+//  仅仅提供公共的 message type
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.annatarhe.athena.proto.common";
+option java_outer_classname = "CommonProto";
+
+package proto;
+
+service Common {
+}
+
+message error {
+    int32 code = 1000;
+    string msg = 1001;
+}
+
+message CommonBoolReply {
+    bool success = 1;
+    repeated error errors = 10001;
+}
+
+message PaginationRequest {
+  int32 from = 1;
+  int32 take = 2;
+  int32 offset = 3;
+}

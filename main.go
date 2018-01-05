@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net"
 
@@ -15,8 +14,7 @@ import (
 const port = ":9988"
 
 func main() {
-
-	log.Println(cfg.CONFIG)
+	log.SetPrefix("backend")
 
 	lis, err := net.Listen("tcp", port)
 	if err != nil {
@@ -31,5 +29,5 @@ func main() {
 		log.Fatalf("failed to serve: %v", err)
 	}
 
-	fmt.Println("back end server running on ", port)
+	log.Println("backend server running on ", port, " in ", cfg.CONFIG.IsDev, " mode")
 }

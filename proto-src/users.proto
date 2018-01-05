@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+import "common.proto";
+
+option java_multiple_files = true;
+option java_package = "com.annatarhe.athena.proto.users";
+option java_outer_classname = "UsersProto";
+
+package proto;
+
+service Users {
+  rpc GetList (PaginationRequest) returns (UserList) {}
+  rpc Add (UserItem) returns (UserItem) {}
+  rpc Auth (AuthRequest) returns (UserItem) {}
+  rpc Get (UserItem) returns (UserItem) {}
+  rpc Remove (UserItem) returns (UserItem) {}
+  rpc Destroy (UserItem) returns (CommonBoolReply) {}
+  rpc Update (UserItem) returns (UserItem) {}
+}
+
+message AuthRequest {
+    string email = 2;
+    string pwd = 4;
+}
+
+message UserItem {
+    int64 id = 1;
+    string email = 2;
+    string name = 3;
+    string pwd = 4;
+    string avatar = 5;
+    int32 role = 6;
+    string bio = 7;
+	int64 createdAt = 8;
+    int64 updatedAt = 9;
+}
+
+message UserList {
+    repeated UserItem users = 10001;
+}

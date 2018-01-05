@@ -1,0 +1,32 @@
+syntax = "proto3";
+import "common.proto";
+
+option java_multiple_files = true;
+option java_package = "com.annatarhe.athena.proto.categories";
+option java_outer_classname = "CategoryProto";
+
+package proto;
+
+service Categories {
+  rpc GetList (PaginationRequest) returns (CategoryReply) {}
+  rpc Add (CategoryItem) returns (CategoryReply) {}
+}
+
+message CategoryRequest { }
+message CategoryAddRequest {
+  string name = 2;
+  int32 src = 200;
+}
+
+message CategoryItem {
+  int32 id = 1;
+  string name = 2;
+  int32 src = 3;
+  int64 count = 4;
+  int64 createdAt  = 5;
+  int64 updatedAt  = 6;
+}
+
+message CategoryReply {
+    repeated CategoryItem categories = 2; 
+}
