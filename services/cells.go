@@ -10,7 +10,7 @@ import (
 
 type CellServer struct{}
 
-func (s *CellServer) GetList(ctx context.Context, in *pb.CellsRequest) (*pb.CellsReply, error) {
+func (this *CellServer) GetList(ctx context.Context, in *pb.PaginationRequest) (*pb.CellsReply, error) {
 	log.Println("CellServer.GetList: ", in)
 	cells, err := model.CellsFetchAll(in.GetFrom(), in.GetTake(), in.GetOffset(), 2)
 
@@ -19,4 +19,11 @@ func (s *CellServer) GetList(ctx context.Context, in *pb.CellsRequest) (*pb.Cell
 	return &pb.CellsReply{
 		Cells: reply,
 	}, err
+}
+func (this *CellServer) Add(ctx context.Context, in *pb.CellItem) (*pb.CellItem, error) {
+}
+func (this *CellServer) Remove(ctx context.Context, in *pb.CellItem) (*pb.CommonBoolReply, error) {
+}
+
+func (this *CellServer) Destroy(ctx context.Context, in *pb.CellItem) (*pb.CommonBoolReply, error) {
 }

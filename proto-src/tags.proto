@@ -1,0 +1,30 @@
+syntax = "proto3";
+import "common.proto";
+import "cells.proto";
+
+option java_multiple_files = true;
+option java_package = "com.annatarhe.athena.proto.tags";
+option java_outer_classname = "TagsProto";
+
+package proto;
+
+service Tags {
+    rpc GetAll(PaginationRequest) returns (TagList) {}
+    rpc Get(TagItem) returns (TagItem) {}
+    rpc Add(TagItem) returns (TagItem) {}
+    rpc GetCells(PaginationRequest) returns (CellsReply) {}
+}
+
+message TagItem {
+    int32 id = 1;
+    string name = 2;
+    string desc = 3;
+    int64 createdAt = 1008;
+    int64 updatedAt = 1009;
+}
+
+message TagList {
+    repeated TagItem tags = 1001;
+}
+
+

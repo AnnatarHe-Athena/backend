@@ -1,5 +1,4 @@
 syntax = "proto3";
-
 import "common.proto";
 
 option java_multiple_files = true;
@@ -10,6 +9,9 @@ package proto;
 
 service Cells {
   rpc GetList (PaginationRequest) returns (CellsReply) {}
+	rpc Add(CellItem) returns (CellItem) {}
+	rpc Remove(CellItem) returns (CommonBoolReply) {}
+	rpc Destroy(CellItem) returns (CommonBoolReply) {}
 }
 
 message CellItem {
@@ -17,9 +19,12 @@ message CellItem {
 	string img = 2;
 	string text = 3;
 	int32 premission = 4;
+	int32 likes = 13;
 	int32 cate = 5;
   string fromID = 6;
 	string fromURL = 7;
+	string content = 12;
+	string md5 = 10001;
 	int64 createdAt = 8;
 	int64 updatedAt = 9;
 	int64 createdBy = 10;

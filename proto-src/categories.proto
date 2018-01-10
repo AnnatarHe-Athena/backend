@@ -12,7 +12,6 @@ service Categories {
   rpc Add (CategoryItem) returns (CategoryReply) {}
 }
 
-message CategoryRequest { }
 message CategoryAddRequest {
   string name = 2;
   int32 src = 200;

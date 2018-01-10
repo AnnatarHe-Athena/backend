@@ -24,4 +24,10 @@ message PaginationRequest {
   int32 from = 1;
   int32 take = 2;
   int32 offset = 3;
+  //   optional
+
+  // for get cells
+  bool hiddenOnly = 4;
+  // get cells by tagId
+  int32 tagId = 5;
 }
