@@ -9,9 +9,9 @@ option java_outer_classname = "CollectionProto";
 package proto;
 
 service Collections {
-  rpc GetList (PaginationRequest) returns (CellsReply) {}
-  rpc Add (CollectionItem) returns (CommonBoolReply) {}
-  rpc Remove (CollectionItem) returns (CommonBoolReply) {}
+  rpc GetList(PaginationRequest) returns (CellsReply) {}
+  rpc Add(CollectionItem) returns (CommonBoolReply) {}
+  rpc Remove(CollectionItem) returns (CommonBoolReply) {}
 }
 
 message CollectionItem {

@@ -80,7 +80,6 @@ func (cell *Cell) EncodeImageURL() {
 }
 
 func (cell Cell) ConvertToProtoType() *proto.CellItem {
-	// TODO
 	return &proto.CellItem{
 		Id:         int32(cell.ID),
 		Img:        cell.Img,

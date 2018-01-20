@@ -8,8 +8,8 @@ option java_outer_classname = "CategoryProto";
 package proto;
 
 service Categories {
-  rpc GetList (PaginationRequest) returns (CategoryReply) {}
-  rpc Add (CategoryItem) returns (CategoryReply) {}
+  rpc GetList(PaginationRequest) returns (CategoryReply) {}
+  rpc Add(CategoryItem) returns (CategoryReply) {}
 }
 
 message CategoryAddRequest {

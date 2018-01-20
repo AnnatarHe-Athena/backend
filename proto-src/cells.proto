@@ -8,7 +8,7 @@ option java_outer_classname = "CellsProto";
 package proto;
 
 service Cells {
-  rpc GetList (PaginationRequest) returns (CellsReply) {}
+  rpc GetList(PaginationRequest) returns (CellsReply) {}
 	rpc Add(CellItem) returns (CellItem) {}
 	rpc Remove(CellItem) returns (CommonBoolReply) {}
 	rpc Destroy(CellItem) returns (CommonBoolReply) {}

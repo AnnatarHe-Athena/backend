@@ -9,13 +9,13 @@ option java_outer_classname = "UsersProto";
 package proto;
 
 service Users {
-  rpc GetList (PaginationRequest) returns (UserList) {}
-  rpc Add (UserItem) returns (UserItem) {}
-  rpc Auth (AuthRequest) returns (UserItem) {}
-  rpc Get (UserItem) returns (UserItem) {}
-  rpc Remove (UserItem) returns (UserItem) {}
-  rpc Destroy (UserItem) returns (CommonBoolReply) {}
-  rpc Update (UserItem) returns (UserItem) {}
+  rpc GetList(PaginationRequest) returns (UserList) {}
+  rpc Add(UserItem) returns (UserItem) {}
+  rpc Auth(AuthRequest) returns (UserItem) {}
+  rpc Get(UserItem) returns (UserItem) {}
+  rpc Remove(UserItem) returns (UserItem) {}
+  rpc Destroy(UserItem) returns (CommonBoolReply) {}
+  rpc Update(UserItem) returns (UserItem) {}
 }
 
 message AuthRequest {
