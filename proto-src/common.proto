@@ -30,4 +30,6 @@ message PaginationRequest {
   bool hiddenOnly = 4;
   // get cells by tagId
   int32 tagId = 5;
+
+  int32 userId = 6;
 }

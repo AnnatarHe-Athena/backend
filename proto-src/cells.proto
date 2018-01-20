@@ -9,7 +9,7 @@ package proto;
 
 service Cells {
   rpc GetList(PaginationRequest) returns (CellsReply) {}
-	rpc Add(CellItem) returns (CellItem) {}
+	rpc Add(CellItem) returns (CellsReply) {}
 	rpc Remove(CellItem) returns (CommonBoolReply) {}
 	rpc Destroy(CellItem) returns (CommonBoolReply) {}
 }
@@ -18,7 +18,7 @@ message CellItem {
   int32 id = 1;
 	string img = 2;
 	string text = 3;
-	int32 premission = 4;
+	int32 permission = 4;
 	int32 likes = 13;
 	int32 cate = 5;
   string fromID = 6;
@@ -28,6 +28,7 @@ message CellItem {
 	int64 createdAt = 8;
 	int64 updatedAt = 9;
 	int64 createdBy = 10;
+	repeated string tags = 11;
 }
 
 message CellsReply {

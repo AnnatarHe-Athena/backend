@@ -3,6 +3,7 @@ package model
 import (
 	"database/sql"
 	"encoding/base64"
+	"log"
 	"time"
 
 	"github.com/douban-girls/backend/proto"
@@ -13,7 +14,7 @@ type Cell struct {
 	ID         int    `json:"id"`
 	Img        string `json:"img"`
 	Text       string `json:"text"`
-	Premission int    `json:"premission"`
+	Permission int    `json:"premission"`
 	Cate       int    `json:"cate"`
 	FromID     string `json:"from_id"`
 	FromURL    string `json:"from_url"`
@@ -22,8 +23,8 @@ type Cell struct {
 
 type Cells []*Cell
 
-func CellsFetchAll(cate, row, offset, premission int32) (Cells, error) {
-	rows, err := DBInstance.Query("SELECT id, text, img, cate, premission, from_url, from_id, createdat FROM cells WHERE cate=$1 AND premission=$2 ORDER BY id DESC LIMIT $3 OFFSET $4", cate, premission, row, offset)
+func CellsFetchAll(cate, row, offset, permission int32) (Cells, error) {
+	rows, err := DBInstance.Query("SELECT id, text, img, cate, premission, from_url, from_id, createdat FROM cells WHERE cate=$1 AND premission=$2 ORDER BY id DESC LIMIT $3 OFFSET $4", cate, permission, row, offset)
 	defer rows.Close()
 
 	if err != nil {
@@ -36,18 +37,18 @@ func CellsFetchAll(cate, row, offset, premission int32) (Cells, error) {
 
 func GetCellsFromRows(rows *sql.Rows) (result Cells) {
 	for rows.Next() {
-		var id, cate, premission int
+		var id, cate, permission int
 		var text, img, fromID, fromURL, createdAt string
-		if err := rows.Scan(&id, &text, &img, &cate, &premission, &fromURL, &fromID, &createdAt); err != nil {
+		if err := rows.Scan(&id, &text, &img, &cate, &permission, &fromURL, &fromID, &createdAt); err != nil {
 			utils.ErrorLog(err)
 			return
 		}
-		createdAtUnix := getTimestamp(createdAt)
+		createdAtUnix := utils.Timestamp(createdAt)
 		result = append(result, &Cell{
 			ID:         id,
 			Img:        img,
 			Text:       text,
-			Premission: premission,
+			Permission: permission,
 			Cate:       cate,
 			FromID:     fromID,
 			FromURL:    fromURL,
@@ -57,16 +58,23 @@ func GetCellsFromRows(rows *sql.Rows) (result Cells) {
 	result.EncodeImageURL()
 	return
 }
-
-func getTimestamp(createdBy string) (createdAtUnix int64) {
-	timestamp, err := time.Parse(time.RFC3339, createdBy)
+func (cs Cells) Save() error {
+	stat, err := DBInstance.Prepare("INSERT INTO cells(img, text, cate, premission, from_id, from_url) VALUES($1, $2, $3, $4, $5, $6) ON CONFLICT (img) DO NOTHING RETURNING id")
 	if err != nil {
-		createdAtUnix = time.Now().Unix()
 		utils.ErrorLog(err)
-	} else {
-		createdAtUnix = timestamp.Unix()
+		return err
 	}
-	return
+	for _, cell := range cs {
+		var id int
+		err := stat.QueryRow(cell.Img, cell.Text, cell.Cate, cell.Permission, cell.FromID, cell.FromURL).Scan(&id)
+		cell.ID = id
+		log.Println(*cell)
+		if err != nil {
+			utils.ErrorLog(err)
+			return err
+		}
+	}
+	return nil
 }
 
 func (cs Cells) EncodeImageURL() {
@@ -84,7 +92,7 @@ func (cell Cell) ConvertToProtoType() *proto.CellItem {
 		Id:         int32(cell.ID),
 		Img:        cell.Img,
 		Text:       cell.Text,
-		Premission: int32(cell.Premission),
+		Premission: int32(cell.Permission),
 		Cate:       int32(cell.Cate),
 		FromID:     cell.FromID,
 		FromURL:    cell.FromURL,
@@ -97,4 +105,20 @@ func (cs Cells) ConvertToProtoType() (result []*proto.CellItem) {
 		result = append(result, item.ConvertToProtoType())
 	}
 	return
+}
+
+func (this *Cell) Remove(reallyDestroy bool) bool {
+	var rows *sql.Rows
+	var err error
+	if reallyDestroy {
+		rows, err = DBInstance.Query("DELETE FROM cells WHERE id=$1", this.ID)
+	} else {
+		rows, err = DBInstance.Query("UPDATE cells SET premission=3, updatedat=$1 WHERE id=$2", time.Now(), this.ID)
+	}
+	if err != nil {
+		log.Println("error occean when cell to hide or remove", err)
+		return false
+	}
+	defer rows.Close()
+	return true
 }
