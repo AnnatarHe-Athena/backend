@@ -27,7 +27,7 @@ func (cs Collections) Save() error {
 }
 
 func FetchUserCollectionBy(id, from, size int) (Cells, error) {
-	rows, err := DBInstance.Query("SELECT cells.id, cells.text, cells.img, cells.cate, cells.premission, cells.from_url, cells.from_id, cells.createdAt FROM cells, collections WHERE collections.cell = cells.id AND collections.owner = $1 AND cells.id > $2 LIMIT $3", id, from, size)
+	rows, err := DBInstance.Query("SELECT cells.id, cells.text, cells.img, cells.cate, cells.premission, cells.from_url, cells.from_id, cells.createdAt FROM cells, collections WHERE collections.cell = cells.id AND collections.owner = $1 OFFSET $2 LIMIT $3", id, from, size)
 
 	if err != nil {
 		utils.ErrorLog(err)

@@ -14,7 +14,7 @@ type Cell struct {
 	ID         int    `json:"id"`
 	Img        string `json:"img"`
 	Text       string `json:"text"`
-	Permission int    `json:"premission"`
+	Permission int    `json:"permission"`
 	Cate       int    `json:"cate"`
 	FromID     string `json:"from_id"`
 	FromURL    string `json:"from_url"`
@@ -77,6 +77,22 @@ func (cs Cells) Save() error {
 	return nil
 }
 
+func (cell *Cell) Save() error {
+	stat, err := DBInstance.Prepare("INSERT INTO cells(img, text, cate, premission, from_id, from_url) VALUES($1, $2, $3, $4, $5, $6) ON CONFLICT (img) DO NOTHING RETURNING id")
+	if err != nil {
+		utils.ErrorLog(err)
+		return err
+	}
+	var id int
+	e := stat.QueryRow(cell.Img, cell.Text, cell.Cate, cell.Permission, cell.FromID, cell.FromURL).Scan(&id)
+	if e != nil {
+		utils.ErrorLog(err)
+		return err
+	}
+	cell.ID = id
+	return nil
+}
+
 func (cs Cells) EncodeImageURL() {
 	for _, cell := range cs {
 		cell.EncodeImageURL()
@@ -92,7 +108,7 @@ func (cell Cell) ConvertToProtoType() *proto.CellItem {
 		Id:         int32(cell.ID),
 		Img:        cell.Img,
 		Text:       cell.Text,
-		Premission: int32(cell.Permission),
+		Permission: int32(cell.Permission),
 		Cate:       int32(cell.Cate),
 		FromID:     cell.FromID,
 		FromURL:    cell.FromURL,

@@ -4,5 +4,5 @@ package cfg
 
 var CONFIG = &ConfigType{
 	IsDev:               true,
-	DatabaseResourceStr: "host=db user=postgres password=admin dbname=postgres sslmode=disable",
+	DatabaseResourceStr: "host=127.0.0.1 user=postgres password=admin dbname=postgres sslmode=disable",
 }
