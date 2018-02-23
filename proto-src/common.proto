@@ -20,7 +20,10 @@ message CommonBoolReply {
     repeated error errors = 10001;
 }
 
+message NullRequest {}
+
 message PaginationRequest {
+  // 这里稍微有些混乱，from 意为来自于哪个 cate，而在获取用户 collection 的时候以为着 offset 了
   int32 from = 1;
   int32 take = 2;
   int32 offset = 3;
@@ -31,5 +34,6 @@ message PaginationRequest {
   // get cells by tagId
   int32 tagId = 5;
 
+  // 这里稍微有些混乱，userId 在获取收藏的时候有用
   int32 userId = 6;
 }

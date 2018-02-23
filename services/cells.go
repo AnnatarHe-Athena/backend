@@ -12,7 +12,11 @@ type CellServer struct{}
 
 func (this *CellServer) GetList(ctx context.Context, in *pb.PaginationRequest) (*pb.CellsReply, error) {
 	log.Println("CellServer.GetList: ", in)
-	cells, err := model.CellsFetchAll(in.GetFrom(), in.GetTake(), in.GetOffset(), 2)
+	permission := 2
+	if in.GetHiddenOnly() {
+		permission = 3
+	}
+	cells, err := model.CellsFetchAll(in.GetFrom(), in.GetTake(), in.GetOffset(), int32(permission))
 
 	reply := cells.ConvertToProtoType()
 

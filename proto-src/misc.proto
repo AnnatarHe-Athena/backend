@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "common.proto";
+
+option java_multiple_files = true;
+option java_package = "com.annatarhe.athena.proto.version";
+option java_outer_classname = "VersionsProto";
+
+package proto;
+
+service Misc {
+    rpc Get(NullRequest) returns (MiscReturnMsg) {}
+}
+
+message MiscReturnMsg {
+    int32 userCount = 16;
+    int64 cellCount = 17;
+}

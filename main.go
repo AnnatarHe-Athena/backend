@@ -29,6 +29,7 @@ func main() {
 	pb.RegisterUsersServer(s, &services.UserServer{})
 	pb.RegisterVersionsServer(s, &services.VersionServer{})
 	pb.RegisterCategoriesServer(s, &services.CategoryServer{})
+	pb.RegisterMiscServer(s, &services.MiscServer{})
 	// Register reflection service on gRPC server.
 	reflection.Register(s)
 	if err := s.Serve(lis); err != nil {
