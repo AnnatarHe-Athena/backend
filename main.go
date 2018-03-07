@@ -12,11 +12,9 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-const port = ":9988"
-
 func main() {
 	log.SetPrefix("backend | ")
-	lis, err := net.Listen("tcp", port)
+	lis, err := net.Listen("tcp", cfg.CONFIG.Port)
 	onAppStart()
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)

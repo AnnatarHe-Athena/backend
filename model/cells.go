@@ -108,7 +108,7 @@ func (cell Cell) ConvertToProtoType() *proto.CellItem {
 		Id:         int32(cell.ID),
 		Img:        cell.Img,
 		Text:       cell.Text,
-		Permission: int32(cell.Permission),
+		Premission: int32(cell.Permission),
 		Cate:       int32(cell.Cate),
 		FromID:     cell.FromID,
 		FromURL:    cell.FromURL,
