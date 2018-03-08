@@ -34,7 +34,7 @@ func main() {
 		log.Fatalf("failed to serve: %v", err)
 	}
 
-	log.Println("backend server running on ", port, " in ", cfg.CONFIG.IsDev, " mode")
+	log.Println("backend server running on ", cfg.CONFIG.Port, " in ", cfg.CONFIG.IsDev, " mode")
 }
 
 func onAppStart() {
