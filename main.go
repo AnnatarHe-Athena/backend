@@ -8,6 +8,7 @@ import (
 	"github.com/douban-girls/backend/model"
 	pb "github.com/douban-girls/backend/proto"
 	"github.com/douban-girls/backend/services"
+	raven "github.com/getsentry/raven-go"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
@@ -38,5 +39,8 @@ func main() {
 }
 
 func onAppStart() {
+	if !cfg.CONFIG.IsDev {
+		raven.SetDSN(cfg.CONFIG.RavenDSN)
+	}
 	model.DatabaseInit()
 }
