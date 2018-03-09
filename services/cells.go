@@ -46,8 +46,10 @@ func (c *CellServer) Add(ctx context.Context, in *pb.CellItem) (*pb.CellItemRepl
 }
 
 func (this *CellServer) Remove(ctx context.Context, in *pb.CellItem) (*pb.CommonBoolReply, error) {
+	log.Println(in.GetId())
 	cell := &model.Cell{ID: int(in.GetId())}
 	result := cell.Remove(false)
+	log.Println("ended cell remove")
 	return &pb.CommonBoolReply{
 		Success: result,
 		// TODO: 添加报错

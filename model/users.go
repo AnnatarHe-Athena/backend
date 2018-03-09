@@ -40,6 +40,17 @@ func (u *User) Auth() error {
 	return nil
 }
 
+// Find a user by userID
+func (u *User) Find() error {
+	row := DBInstance.QueryRow(fetchUserFieldPrefix+" WHERE id=$1", u.ID)
+	err := getUserDataStruct(row, u)
+	if err != nil {
+		log.Println(err)
+		return errors.New("404: user not found")
+	}
+	return nil
+}
+
 func (u *User) Collections(offset, size int) (Cells, error) {
 	return FetchUserCollectionBy(u.ID, offset, size)
 }

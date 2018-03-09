@@ -31,7 +31,7 @@ func (this *CollectionServer) Add(ctx context.Context, in *pb.CollectionItem) (*
 	log.Println(collections)
 	return &pb.CommonBoolReply{
 		Success: err == nil,
-		Errors:  []*pb.Error{&pb.Error{Msg: err.Error(), Code: 50000}},
+		Errors:  nil,
 	}, err
 
 }

@@ -35,7 +35,16 @@ func (this *UserServer) Auth(ctx context.Context, in *pb.AuthRequest) (*pb.UserI
 	return pbUser, err
 }
 func (this *UserServer) Get(ctx context.Context, in *pb.UserItem) (*pb.UserItem, error) {
-	return nil, nil
+	userID := in.GetId()
+
+	user := &model.User{
+		ID: int(userID),
+	}
+
+	err := user.Find()
+	result := user.ConvertToProto()
+
+	return result, err
 }
 func (this *UserServer) Remove(ctx context.Context, in *pb.UserItem) (*pb.UserItem, error) {
 	return nil, nil
