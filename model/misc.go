@@ -10,6 +10,10 @@ func FetchUserCount() int32 {
 }
 
 func FetchCellCount() int64 {
-	// query := "SELECT COUNT(id) from "
-	return 0
+	query := "SELECT COUNT(id) from cells"
+	var count int64
+	if err := DBInstance.QueryRow(query).Scan(&count); err != nil {
+		return -1
+	}
+	return count
 }
