@@ -6,6 +6,7 @@ import (
 
 	"github.com/douban-girls/backend/model"
 	pb "github.com/douban-girls/backend/proto"
+	"github.com/douban-girls/backend/utils"
 )
 
 type CellServer struct{}
@@ -34,6 +35,7 @@ func (c *CellServer) Add(ctx context.Context, in *pb.CellItem) (*pb.CellItemRepl
 		Cate:       int(in.GetCate()),
 		FromID:     in.GetFromID(),
 		FromURL:    in.GetFromURL(),
+		Md5:        utils.GenPassword(in.GetImg()),
 	}
 	log.Println(in)
 	// 塞入数据完成后，需要调用 tags 服务，存入对应的 tag 中

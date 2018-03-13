@@ -19,6 +19,7 @@ type Cell struct {
 	FromID     string `json:"from_id"`
 	FromURL    string `json:"from_url"`
 	CreatedAt  int64  `json:"createdAt"`
+	Md5        string `json:"md5"`
 }
 
 type Cells []*Cell
@@ -78,13 +79,14 @@ func (cs Cells) Save() error {
 }
 
 func (cell *Cell) Save() error {
-	stat, err := DBInstance.Prepare("INSERT INTO cells(img, text, cate, premission, from_id, from_url) VALUES($1, $2, $3, $4, $5, $6) ON CONFLICT (img) DO NOTHING RETURNING id")
+
+	stat, err := DBInstance.Prepare("INSERT INTO cells(img, text, cate, premission, md5, from_id, from_url) VALUES($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (img) DO NOTHING RETURNING id")
 	if err != nil {
 		utils.ErrorLog(err)
 		return err
 	}
 	var id int
-	e := stat.QueryRow(cell.Img, cell.Text, cell.Cate, cell.Permission, cell.FromID, cell.FromURL).Scan(&id)
+	e := stat.QueryRow(cell.Img, cell.Text, cell.Cate, cell.Permission, cell.Md5, cell.FromID, cell.FromURL).Scan(&id)
 	if e != nil {
 		utils.ErrorLog(err)
 		return err
