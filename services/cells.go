@@ -65,7 +65,7 @@ func (this *CellServer) Destroy(ctx context.Context, in *pb.CellItem) (*pb.Commo
 	result := cell.Remove(true)
 	err := &pb.Error{
 		Code: 50000,
-		Msg:  "hello",
+		Msg:  "error when remove item",
 	}
 	return &pb.CommonBoolReply{
 		Success: result,

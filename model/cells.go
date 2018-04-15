@@ -24,8 +24,17 @@ type Cell struct {
 
 type Cells []*Cell
 
+const fieldQuery = "SELECT id, text, img, cate, premission, from_url, from_id, createdat FROM cells WHERE "
+
 func CellsFetchAll(cate, row, offset, permission int32) (Cells, error) {
-	rows, err := DBInstance.Query("SELECT id, text, img, cate, premission, from_url, from_id, createdat FROM cells WHERE cate=$1 AND premission=$2 ORDER BY id DESC LIMIT $3 OFFSET $4", cate, permission, row, offset)
+	var rows *sql.Rows
+	var err error
+	if permission == 3 {
+		rows, err = DBInstance.Query(fieldQuery+"premission=$1 ORDER BY id DESC LIMIT $2 OFFSET $3", permission, row, offset)
+	} else {
+		rows, err = DBInstance.Query(fieldQuery+"cate=$1 AND premission=$2 ORDER BY id DESC LIMIT $3 OFFSET $4", cate, permission, row, offset)
+	}
+
 	defer rows.Close()
 
 	if err != nil {
