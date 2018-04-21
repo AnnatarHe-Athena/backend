@@ -19,12 +19,13 @@ type Cell struct {
 	FromID     string `json:"from_id"`
 	FromURL    string `json:"from_url"`
 	CreatedAt  int64  `json:"createdAt"`
+	Content    string `json:"content"`
 	Md5        string `json:"md5"`
 }
 
 type Cells []*Cell
 
-const fieldQuery = "SELECT id, text, img, cate, premission, from_url, from_id, createdat FROM cells WHERE "
+const fieldQuery = "SELECT id, text, content, img, cate, premission, from_url, from_id, createdat FROM cells WHERE "
 
 func CellsFetchAll(cate, row, offset, permission int32) (Cells, error) {
 	var rows *sql.Rows
@@ -48,8 +49,8 @@ func CellsFetchAll(cate, row, offset, permission int32) (Cells, error) {
 func GetCellsFromRows(rows *sql.Rows) (result Cells) {
 	for rows.Next() {
 		var id, cate, permission int
-		var text, img, fromID, fromURL, createdAt string
-		if err := rows.Scan(&id, &text, &img, &cate, &permission, &fromURL, &fromID, &createdAt); err != nil {
+		var text, content, img, fromID, fromURL, createdAt string
+		if err := rows.Scan(&id, &text, &content, &img, &cate, &permission, &fromURL, &fromID, &createdAt); err != nil {
 			utils.ErrorLog(err)
 			return
 		}
@@ -58,6 +59,7 @@ func GetCellsFromRows(rows *sql.Rows) (result Cells) {
 			ID:         id,
 			Img:        img,
 			Text:       text,
+			Content:    content,
 			Permission: permission,
 			Cate:       cate,
 			FromID:     fromID,
