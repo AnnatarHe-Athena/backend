@@ -1,19 +1,20 @@
 package model
 
 import (
-	"database/sql"
 	"log"
+
+	"github.com/jmoiron/sqlx"
 
 	"github.com/douban-girls/backend/cfg"
 	_ "github.com/lib/pq"
 )
 
 // DBInstance is database connection resource to global share
-var DBInstance *sql.DB
+var DBInstance *sqlx.DB
 
 // DatabaseInit have to called at init.
 func DatabaseInit() (err error) {
-	DBInstance, err = sql.Open("postgres", cfg.CONFIG.DatabaseResourceStr)
+	DBInstance, err = sqlx.Open("postgres", cfg.CONFIG.DatabaseResourceStr)
 	if err != nil {
 		log.Panic("connect to database server error: ", err)
 	} else {
