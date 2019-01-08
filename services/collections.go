@@ -18,7 +18,6 @@ func (this *CollectionServer) GetList(ctx context.Context, in *pb.PaginationRequ
 	cells, err := user.Collections(int(in.GetFrom()), int(in.GetTake()))
 	cells.EncodeImageURL()
 
-	// cells, err := model.FetchUserCollectionBy(int(in.GetUserId()), int(in.GetFrom()), int(in.GetOffset()))
 	reply := cells.ConvertToProtoType()
 
 	return &pb.CellsReply{Cells: reply}, err

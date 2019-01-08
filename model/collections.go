@@ -1,6 +1,7 @@
 package model
 
 import (
+	"database/sql"
 	"log"
 )
 
@@ -25,7 +26,7 @@ func (cs Collections) Save() error {
 		var _c Collection
 
 		// 如果已经存在这条收藏记录，则不再插入
-		if err := DBInstance.Get(&_c, "SELECT id from collections WHERE cell=$1 AND owner=$2", collection.Cell, collection.Owner); err != nil {
+		if err := DBInstance.Get(&_c, "SELECT id from collections WHERE cell=$1 AND owner=$2", collection.Cell, collection.Owner); err != nil && err != sql.ErrNoRows {
 			log.Println(err)
 			continue
 		}

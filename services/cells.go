@@ -18,6 +18,7 @@ func (this *CellServer) GetList(ctx context.Context, in *pb.PaginationRequest) (
 		permission = 3
 	}
 	cells, err := model.CellsFetchAll(in.GetFrom(), in.GetTake(), in.GetOffset(), int32(permission))
+	cells.EncodeImageURL()
 
 	reply := cells.ConvertToProtoType()
 
