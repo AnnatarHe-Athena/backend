@@ -11,16 +11,19 @@ import (
 )
 
 type Cell struct {
-	ID         int    `json:"id"`
-	Img        string `json:"img"`
-	Text       string `json:"text"`
-	Permission int    `json:"permission"`
-	Cate       int    `json:"cate"`
-	FromID     string `json:"from_id"`
-	FromURL    string `json:"from_url"`
-	CreatedAt  int64  `json:"createdAt"`
-	Content    string `json:"content"`
-	Md5        string `json:"md5"`
+	ID         int           `json:"id" db:"id"`
+	Img        string        `json:"img" db:"img"`
+	Text       string        `json:"text" db:"text"`
+	Permission int           `json:"permission" db:"premission"`
+	Cate       int           `json:"cate" db:"cate"`
+	FromID     string        `json:"from_id" db:"from_id"`
+	FromURL    string        `json:"from_url" db:"from_url"`
+	CreatedAt  time.Time     `json:"createdAt" db:"createdat"`
+	CreatedBy  sql.NullInt64 `json:"createdBy" db:"createdby"`
+	UpdatedAt  time.Time     `json:"updatedAt" db:"updatedat"`
+	Content    string        `json:"content" db:"content"`
+	Likes      int           `json:"likes" db:"likes"`
+	Md5        string        `json:"md5" db:"md5"`
 }
 
 type Cells []*Cell
@@ -28,33 +31,33 @@ type Cells []*Cell
 const fieldQuery = "SELECT id, text, content, img, cate, premission, from_url, from_id, createdat FROM cells WHERE "
 
 func CellsFetchAll(cate, row, offset, permission int32) (Cells, error) {
-	var rows *sql.Rows
 	var err error
+
+	cellList := []*Cell{}
+
 	if permission == 3 {
-		rows, err = DBInstance.Query(fieldQuery+"premission=$1 ORDER BY id DESC LIMIT $2 OFFSET $3", permission, row, offset)
+		err = DBInstance.Select(&cellList, "SELECT * FROM cells WHERE premission=$1 ORDER BY id DESC LIMIT $2 OFFSET $3", permission, row, offset)
 	} else {
-		rows, err = DBInstance.Query(fieldQuery+"cate=$1 AND premission=$2 ORDER BY id DESC LIMIT $3 OFFSET $4", cate, permission, row, offset)
+		err = DBInstance.Select(&cellList, "SELECT * FROM cells WHERE cate=$1 AND premission=$2 ORDER BY id DESC LIMIT $3 OFFSET $4", cate, permission, row, offset)
 	}
 
-	defer rows.Close()
+	log.Println(cellList, err)
 
-	if err != nil {
-		return nil, err
-	}
+	return cellList, err
 
-	result := GetCellsFromRows(rows)
-	return result, nil
+	// result := GetCellsFromRows(rows)
+	// return result, nil
 }
 
 func GetCellsFromRows(rows *sql.Rows) (result Cells) {
 	for rows.Next() {
 		var id, cate, permission int
-		var text, content, img, fromID, fromURL, createdAt string
+		var text, content, img, fromID, fromURL string
+		var createdAt time.Time
 		if err := rows.Scan(&id, &text, &content, &img, &cate, &permission, &fromURL, &fromID, &createdAt); err != nil {
 			utils.ErrorLog(err)
 			return
 		}
-		createdAtUnix := utils.Timestamp(createdAt)
 		result = append(result, &Cell{
 			ID:         id,
 			Img:        img,
@@ -64,7 +67,7 @@ func GetCellsFromRows(rows *sql.Rows) (result Cells) {
 			Cate:       cate,
 			FromID:     fromID,
 			FromURL:    fromURL,
-			CreatedAt:  createdAtUnix,
+			CreatedAt:  createdAt,
 		})
 	}
 	result.EncodeImageURL()
@@ -80,7 +83,7 @@ func (cs Cells) Save() error {
 		var id int
 		err := stat.QueryRow(cell.Img, cell.Text, cell.Cate, cell.Permission, cell.FromID, cell.FromURL).Scan(&id)
 		cell.ID = id
-		log.Println(*cell)
+		log.Println(cell)
 		if err != nil {
 			utils.ErrorLog(err)
 			return err
@@ -90,7 +93,6 @@ func (cs Cells) Save() error {
 }
 
 func (cell *Cell) Save() error {
-
 	stat, err := DBInstance.Prepare("INSERT INTO cells(img, text, cate, premission, md5, from_id, from_url) VALUES($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (img) DO NOTHING RETURNING id")
 	if err != nil {
 		utils.ErrorLog(err)
@@ -115,7 +117,6 @@ func (cs Cells) EncodeImageURL() {
 func (cell *Cell) EncodeImageURL() {
 	cell.Img = base64.StdEncoding.EncodeToString([]byte(cell.Img))
 }
-
 func (cell Cell) ConvertToProtoType() *proto.CellItem {
 	return &proto.CellItem{
 		Id:         int32(cell.ID),
@@ -126,7 +127,7 @@ func (cell Cell) ConvertToProtoType() *proto.CellItem {
 		Cate:       int32(cell.Cate),
 		FromID:     cell.FromID,
 		FromURL:    cell.FromURL,
-		CreatedAt:  cell.CreatedAt,
+		CreatedAt:  int64(cell.CreatedAt.Second()),
 	}
 }
 

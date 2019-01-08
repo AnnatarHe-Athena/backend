@@ -13,7 +13,7 @@ dev:
 	# gin --port=9002 --appPort=9988 --notifications run main.go
 
 release:
-	go build -tags release -o $(output_name)
+	CGO_ENABLED=0 go build -tags release -o $(output_name)
 	mv $(output_name) /tmp
 	echo "to /tmp and send it to server"
 	echo "build date: ", BUILD_TIME

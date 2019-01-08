@@ -18,3 +18,4 @@ gin-bin
 proto/
 backend
 cfg/cfg.release.go
+backend-exec
