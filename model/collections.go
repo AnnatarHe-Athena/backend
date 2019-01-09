@@ -31,7 +31,7 @@ func (cs Collections) Save() error {
 			continue
 		}
 
-		if id != 0 {
+		if _c.ID != 0 {
 			continue
 		}
 
