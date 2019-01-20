@@ -21,6 +21,6 @@ func DatabaseInit() (err error) {
 		log.Println("connect to the database successfully with: ", cfg.CONFIG.DatabaseResourceStr)
 	}
 
-	DBInstance.DB.SetMaxOpenConns(50)
+	// DBInstance.DB.SetMaxOpenConns(50)
 	return err
 }
