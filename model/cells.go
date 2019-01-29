@@ -79,6 +79,8 @@ func (cs Cells) Save() error {
 		utils.ErrorLog(err)
 		return err
 	}
+
+	defer stat.Close()
 	for _, cell := range cs {
 		var id int
 		err := stat.QueryRow(cell.Img, cell.Text, cell.Cate, cell.Permission, cell.FromID, cell.FromURL).Scan(&id)
@@ -98,6 +100,8 @@ func (cell *Cell) Save() error {
 		utils.ErrorLog(err)
 		return err
 	}
+
+	defer stat.Close()
 	var id int
 	e := stat.QueryRow(cell.Img, cell.Text, cell.Cate, cell.Permission, cell.Md5, cell.FromID, cell.FromURL).Scan(&id)
 	if e != nil {
