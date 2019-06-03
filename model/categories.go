@@ -18,7 +18,7 @@ type Categories []Category
 
 // FetchAllCategories deprecated 获取所有分类
 func FetchAllCategories() (Categories, error) {
-	rows, err := DBInstance.Query(`SELECT categories.id, categories.name, categories.src, count(cells.id), categories.createdat, categories.updatedat AS count FROM categories, cells WHERE categories.id = cells.cate GROUP BY categories.id;`)
+	rows, err := DBInstance.Query(`SELECT categories.id, categories.name, categories.src, count(cells.id), categories.createdat, categories.updatedat  FROM categories, cells WHERE categories.id = cells.cate GROUP BY categories.id;`)
 	defer rows.Close()
 	categories := []Category{}
 	if err != nil {
